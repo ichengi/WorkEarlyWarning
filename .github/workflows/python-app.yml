@@ -17,4 +17,3 @@ jobs:
       - name: Run Python Script
         run: |
           python EarlyWarning.py
-		
