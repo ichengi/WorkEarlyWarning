@@ -45,7 +45,7 @@ def judge_api(api_url:list)->str:
         time_get_str = api_data["data"].get("gettime") # 获取时间
         time_get = datetime.datetime.strptime(time_get_str,"%Y-%m-%d %H:%M:%S") # 转换格式
         now_time = datetime.datetime.now()
-        if (now_time-datetime.timedelta(hours=2)) <= time_get <= (now_time+datetime.timedelta(hours=2)): # 判断是在一小时内获取的
+        if (now_time-datetime.timedelta(hours=9)) <= time_get <= (now_time-datetime.timedelta(hours=7)): # 判断是在一小时内获取的
             pass
         else:
             errmsg = f"接口:{api_url}获取时间超时,最近一次获取是在{time_get}"
