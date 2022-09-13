@@ -2,7 +2,7 @@ name: EarlyWarning
 
 on:
     schedule:
-        - cron: '0/59 * * * * ? '
+     - cron: '0/5 * * * *'
 
 jobs:
   build:
