@@ -14,4 +14,4 @@ jobs:
         uses: actions/setup-python@v2
       - name: Run Python Script
         run: |
-          python EarlyWarning.py
+          python EarlyWarning.py ${{EMAIL_ADDRESS}} ${{EMAIL_PASSWORD}} ${{WEATHER_API}} ${{AQI_API}} 
