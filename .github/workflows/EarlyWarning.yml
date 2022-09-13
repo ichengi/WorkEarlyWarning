@@ -1,7 +1,8 @@
 name: EarlyWarning
 
-on: [push]
-  
+on:
+    schedule:
+        - cron: '0/59 * * * * ? '
 
 jobs:
   build:
