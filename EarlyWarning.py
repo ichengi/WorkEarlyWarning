@@ -43,7 +43,7 @@ def judge_api(api_url:list)->str:
     if "QueryAqi"  in api_url or "QueryWeatherdata" in api_url:
         api_data = get_json(api_url)  #获取数据
         time_get_str = api_data["data"].get("gettime") # 获取时间
-        time_get = datetime.datetime.strptime(time_get_str,"%Y-%m-%d %H:%M:%S") # 转换格式
+        time_get = datetime.datetime.strptime(time_get_str,"%Y-%m-%d %H:%M:%S")+datetime.timedelta(hours=0) # 转换格式
         now_time = datetime.datetime.now()
         last_time = now_time-datetime.timedelta(hours=1)
         fu_time = now_time+datetime.timedelta(hours=1)
