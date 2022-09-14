@@ -12,11 +12,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: SetUp Python
-        uses: actions/setup-python@v2
-      - name: Install Package
-        run: |
-          pip install requests
+#使用自己的服务器就不需要装环境了
+#      - name: SetUp Python
+#        uses: actions/setup-python@v2
+#      - name: Install Package
+#        run: |
+#          pip install requests
       - name: Run Python Script
         run: |
-          python EarlyWarning.py ${{secrets.EMAIL_ADDRESS}} ${{secrets.EMAIL_PASSWORD}} ${{secrets.WEATHER_API}} ${{secrets.AQI_API}} ${{secrets.WEATHER_PRE}} 
+          python3 EarlyWarning.py ${{secrets.EMAIL_ADDRESS}} ${{secrets.EMAIL_PASSWORD}} ${{secrets.WEATHER_API}} ${{secrets.AQI_API}} ${{secrets.WEATHER_PRE}} 
