@@ -45,12 +45,9 @@ def judge_api(api_url:list)->str:
         time_get_str = api_data["data"].get("gettime") # 获取时间
         time_get = datetime.datetime.strptime(time_get_str,"%Y-%m-%d %H:%M:%S")+datetime.timedelta(hours=0) # 转换格式
         now_time = datetime.datetime.now()
-        last_time = now_time-datetime.timedelta(hours=1)
-        fu_time = now_time+datetime.timedelta(hours=1)
-        if last_time <= time_get <= fu_time: # 判断是在一小时内获取的
-            pass
-        else:
-            errmsg = f"接口:{api_url}获取时间超时,最近一次获取是在{time_get},当前时间为{now_time},比较时间为{last_time},{fu_time}"
+        seconds = (now_time-time_get).seconds
+        if seconds>60*60*1.5:# 判断是在规定时间内获取的
+            errmsg = f"接口:{api_url}获取时间超时,最近一次获取是在{time_get},当前时间为{now_time},过期{float(seconds/60/60)}小时"
     # 日数据
     if "QueryWeatherpre" in api_url:
         now_time = datetime.datetime.now()
@@ -58,11 +55,9 @@ def judge_api(api_url:list)->str:
         if api_data["data"] != "":
             time_get_str = api_data["data"][0].get("update_time")  # 获取时间
             time_get = datetime.datetime.strptime(time_get_str, "%Y-%m-%d %H:%M:%S")  # 转换格式
-            if (now_time + datetime.timedelta(days=-2)) <= time_get <= (
-                    now_time + datetime.timedelta(days=1)):  # 判断是在两天内获取的
-                pass
-            else:
-                errmsg = f"接口:{api_url}获取时间超时,最近一次获取是在{time_get}"
+            seconds = (now_time-time_get).seconds
+            if seconds > 60 * 60 * 24 * 2:  # 判断是在规定时间内获取的
+                errmsg = f"接口:{api_url}获取时间超时,最近一次获取是在{time_get},过期{float(seconds/60/60)}小时"
         else:
             errmsg = f"接口:{api_url}获取失败"
     #endregion
