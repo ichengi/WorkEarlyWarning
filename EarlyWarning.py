@@ -45,10 +45,12 @@ def judge_api(api_url:list)->str:
         time_get_str = api_data["data"].get("gettime") # 获取时间
         time_get = datetime.datetime.strptime(time_get_str,"%Y-%m-%d %H:%M:%S") # 转换格式
         now_time = datetime.datetime.now()
-        if (now_time-datetime.timedelta(hours=1)) <= time_get <= (now_time+datetime.timedelta(hours=1)): # 判断是在一小时内获取的
+        last_time = now_time-datetime.timedelta(hours=8)
+        fu_time = now_time-datetime.timedelta(hours=6)
+        if last_time <= time_get <= fu_time: # 判断是在一小时内获取的
             pass
         else:
-            errmsg = f"接口:{api_url}获取时间超时,最近一次获取是在{time_get},当前时间为{now_time},比较时间为{now_time-datetime.timedelta(hours=1)},{now_time+datetime.timedelta(hours=1)}"
+            errmsg = f"接口:{api_url}获取时间超时,最近一次获取是在{time_get},当前时间为{now_time},比较时间为{last_time},{fu_time}"
     # 日数据
     if "QueryWeatherpre" in api_url:
         now_time = datetime.datetime.now()
