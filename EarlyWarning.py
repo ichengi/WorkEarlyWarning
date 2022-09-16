@@ -61,6 +61,17 @@ def judge_api(api_url:list)->str:
         else:
             errmsg = f"接口:{api_url}获取失败"
     #endregion
+    
+    # region 数据中台,定时发送短信
+    if "authorization" in api_url:
+        api_data = get_json(api_url)  # 获取数据
+        status = api_data['data']['data'][0]['status']
+        if status == "Executed":
+            pass
+        else:
+            errmsg = f"今日份定时发送短信失败，请尽快处理"
+    #endregion
+    
     return  errmsg
 
 if __name__ == '__main__':
