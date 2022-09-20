@@ -20,4 +20,4 @@ jobs:
 #          pip install requests
       - name: Run Python Script
         run: |
-          python3 EarlyWarning.py ${{secrets.EMAIL_ADDRESS}} ${{secrets.EMAIL_PASSWORD}} ${{secrets.WEATHER_API}} ${{secrets.AQI_API}} ${{secrets.WEATHER_PRE}} ${{secrets.AUTHORIZATION_API}}
+          python3 EarlyWarning.py ${{secrets.EMAIL_ADDRESS}} ${{secrets.EMAIL_PASSWORD}} ${{secrets.WEATHER_API}} ${{secrets.AQI_API}} ${{secrets.WEATHER_PRE}} ${{secrets.AUTHORIZATION_API}} ${{secrets.HYDRAULIC_REALTIME}} ${{secrets.HYDRAULIC_DAY}} ${{secrets.HYDRAULIC_HOUR}} 
