@@ -74,7 +74,7 @@ def judge_api(api_url:list)->str:
     #endregion
     # region 水文数据
     if "hydraulic" in api_url:
-        real_time_url = hydraulic_dict.get("Newest")
+        real_time_url = hydraulic_dict.get("realtime")
         hour_url = hydraulic_dict.get("hourdata")
         day_url = hydraulic_dict.get("daydata")
         if  hour_url is not None and real_time_url is not None and day_url is not None  :
@@ -110,8 +110,8 @@ if __name__ == '__main__':
     api_url_list = sys.argv[3:]
     errmsg = ""
     for api_url_item in api_url_list:
-         if "hydraulic" in api_url_item and "Newest" in api_url_item:
-            hydraulic_dict['Newest'] = api_url_item
+         if "hydraulic" in api_url_item and "realtime" in api_url_item:
+            hydraulic_dict['realtime'] = api_url_item
         if "hydraulic" in api_url_item and "hourdata" in api_url_item:
             hydraulic_dict['hourdata'] = api_url_item
         if "hydraulic" in api_url_item and "daydata" in api_url_item:
