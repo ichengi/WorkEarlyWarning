@@ -96,7 +96,7 @@ def judge_api(api_url:str)->str:
                 state = real_time_item['state']
                 if state:# 正常使用
                     #判断小时接口
-                    get_time_str= get_json(f"{hour_url}{stcd}")['data'][0]['date']
+                    get_time_str= requests.get(f"{hour_url}{stcd}",headers=headers).json()['data'][0]['date']
                     hour_time =  datetime.datetime.strptime(get_time_str, "%Y-%m-%d %H")
                     now_time = datetime.datetime.now()
                     seconds = (now_time - hour_time).seconds
@@ -104,7 +104,7 @@ def judge_api(api_url:str)->str:
                         errmsg = f"接口:水利小时数据获取时间超时,最近一次获取是在{hour_time},过期{float(seconds / 60/60)}小时"
 
                     #判断天接口
-                    get_time_str = get_json(f"{day_url}{stcd}")['data'][0]['date']
+                    get_time_str = requests.get(f"{day_url}{stcd}",headers=headers).json()['data'][0]['date']
                     day_time = datetime.datetime.strptime(get_time_str, "%Y-%m-%d")
                     now_time = datetime.datetime.now()
                     seconds = (now_time - day_time).seconds
