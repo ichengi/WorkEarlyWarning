@@ -50,7 +50,7 @@ def judge_api(api_url:list)->str:
         if seconds>60*60*1.5:# 判断是在规定时间内获取的
             errmsg = f"接口:{api_url}获取时间超时,最近一次获取是在{time_get},当前时间为{now_time},过期{float(seconds/60/60)}小时"
     # 日数据
-    if "QueryWeatherpre" in api_url:
+    elif "QueryWeatherpre" in api_url:
         now_time = datetime.datetime.now()
         api_data = get_json(api_url+f"&Day={str(now_time)[:10]}")  #获取数据
         if api_data["data"] != "":
@@ -64,7 +64,7 @@ def judge_api(api_url:list)->str:
     #endregion
     
     # region 数据中台,定时发送短信
-    if "authorization" in api_url:
+    elif "authorization" in api_url:
         api_data = get_json(api_url)  # 获取数据
         status = api_data['data']['data'][0]['status']
         if status == "Executed":
@@ -73,7 +73,7 @@ def judge_api(api_url:list)->str:
             errmsg = f"今日份定时发送短信失败，请尽快处理"
     #endregion
     # region 水文数据
-    if "hydraulic" in api_url:
+    elif "hydraulic" in api_url:
         real_time_url = hydraulic_dict.get("realtime")
         hour_url = hydraulic_dict.get("hourdata")
         day_url = hydraulic_dict.get("daydata")
