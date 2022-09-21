@@ -136,7 +136,7 @@ if __name__ == '__main__':
         try:
             single_err_msg = judge_api(api_url_item)
         except Exception as e:
-            single_err_msg = str(e)
+            single_err_msg =str(api_url_item)+ str(e)
         if single_err_msg is not None:
             errmsg += f"|{single_err_msg}"
     if errmsg != "":
