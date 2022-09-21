@@ -30,13 +30,19 @@ def send_email(EMAIL_ADDRESS:str,EMAIL_PASSWORD:str,errmsg:str)->int:
     except:
         return 0
 
+#获取token
+def get_token(ver_url:str,payload)->str:
+    response = requests.request("POST", ver_url,  data=payload)
+    return response.json()['data']['access']
+
+
 # 获取接口的数据
 def get_json(url:str)->dict:
     r = requests.get(url).json()
     return r
 
 # 判断接口是否正常
-def judge_api(api_url:list)->str:
+def judge_api(api_url:str)->str:
     global hydraulic_dict
     errmsg = None
     #region 天气接口,三个定时任务
@@ -62,26 +68,27 @@ def judge_api(api_url:list)->str:
         else:
             errmsg = f"接口:{api_url}获取失败"
     #endregion
-    
     # region 数据中台,定时发送短信
     elif "authorization" in api_url:
-        return  errmsg
-        api_data = get_json(api_url)  # 获取数据
-        errmsg = api_data
-#         status = api_data['data']['data'][0]['status']
-#         if status == "Executed":
-#             pass
-#         else:
-#             errmsg = f"今日份定时发送短信失败，请尽快处理"
+        token = get_token(AUTHORIZATION_DATA_URL, AUTHORIZATION_DATA)
+        headers = {"Authorization": f"JWT {token}"}
+        api_data = requests.get(api_url,headers=headers).json()  # 获取数据
+        #这里需要授权加token
+        status = api_data['data']['data'][0]['status']
+        if status == "Executed":
+            pass
+        else:
+            errmsg = f"今日份定时发送短信失败，请尽快处理"
     #endregion
     # region 水文数据
     elif "hydraulic" in api_url:
-        return  errmsg
+        token= get_token(HYDRAULIC_DATA_URL,HYDRAULIC_DATA)
+        headers = {"Authorization":f"JWT {token}"}
         real_time_url = hydraulic_dict.get("realtime")
         hour_url = hydraulic_dict.get("hourdata")
         day_url = hydraulic_dict.get("daydata")
         if  hour_url is not None and real_time_url is not None and day_url is not None  :
-            real_time_data = get_json(real_time_url)['data'] # 获取站点数据
+            real_time_data = requests.get(real_time_url,headers=headers).json()['data'] # 获取站点数据
             for real_time_item in real_time_data:
                 stcd = real_time_item['stcd']
                 state = real_time_item['state']
@@ -92,7 +99,7 @@ def judge_api(api_url:list)->str:
                     now_time = datetime.datetime.now()
                     seconds = (now_time - hour_time).seconds
                     if seconds > 60 * 60 *2:  # 判断是在规定时间内获取的
-                        errmsg = f"接口:水文小时数据获取时间超时,最近一次获取是在{hour_time},过期{float(seconds / 60/60)}小时"
+                        errmsg = f"接口:水利小时数据获取时间超时,最近一次获取是在{hour_time},过期{float(seconds / 60/60)}小时"
 
                     #判断天接口
                     get_time_str = get_json(f"{day_url}{stcd}")['data'][0]['date']
@@ -100,7 +107,7 @@ def judge_api(api_url:list)->str:
                     now_time = datetime.datetime.now()
                     seconds = (now_time - day_time).seconds
                     if seconds > 60 * 60 * 24 * 2:  # 判断是在规定时间内获取的
-                        errmsg += f"接口:水文天数据获取时间超时,最近一次获取是在{day_time},过期{float(seconds / 60 / 60)}小时"
+                        errmsg += f"接口:水利天数据获取时间超时,最近一次获取是在{day_time},过期{float(seconds / 60 / 60)}小时"
 
                     break
     # endregion
@@ -110,7 +117,11 @@ if __name__ == '__main__':
     hydraulic_dict = {}
     EMAIL_ADDRESS = sys.argv[1]
     EMAIL_PASSWORD = sys.argv[2]
-    api_url_list = sys.argv[3:]
+    HYDRAULIC_DATA_URL = sys.argv[3] # 请求地址
+    HYDRAULIC_DATA = sys.argv[4] # 授权秘钥
+    AUTHORIZATION_DATA_URL = sys.argv[5] # 请求地址
+    AUTHORIZATION_DATA = sys.argv[6] # 授权秘钥
+    api_url_list = sys.argv[7:]
     errmsg = ""
     for api_url_item in api_url_list:
         if "hydraulic" in api_url_item and "realtime" in api_url_item:
