@@ -65,6 +65,7 @@ def judge_api(api_url:list)->str:
     
     # region 数据中台,定时发送短信
     elif "authorization" in api_url:
+        return  errmsg
         api_data = get_json(api_url)  # 获取数据
         errmsg = api_data
 #         status = api_data['data']['data'][0]['status']
@@ -75,6 +76,7 @@ def judge_api(api_url:list)->str:
     #endregion
     # region 水文数据
     elif "hydraulic" in api_url:
+        return  errmsg
         real_time_url = hydraulic_dict.get("realtime")
         hour_url = hydraulic_dict.get("hourdata")
         day_url = hydraulic_dict.get("daydata")
