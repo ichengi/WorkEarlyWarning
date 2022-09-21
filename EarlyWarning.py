@@ -70,7 +70,8 @@ def judge_api(api_url:str)->str:
     #endregion
     # region 数据中台,定时发送短信
     elif "authorization" in api_url:
-        token = get_token(AUTHORIZATION_DATA_URL, AUTHORIZATION_DATA)
+        payload = {"username": AUTHORIZATION_USERNAME,"password": AUTHORIZATION_PWD}
+        token = get_token(AUTHORIZATION_DATA_URL, payload)
         headers = {"Authorization": f"JWT {token}"}
         api_data = requests.get(api_url,headers=headers).json()  # 获取数据
         #这里需要授权加token
@@ -82,7 +83,8 @@ def judge_api(api_url:str)->str:
     #endregion
     # region 水文数据
     elif "hydraulic" in api_url:
-        token= get_token(HYDRAULIC_DATA_URL,HYDRAULIC_DATA)
+        payload = {"data":HYDRAULIC_DATA}
+        token= get_token(HYDRAULIC_DATA_URL,payload)
         headers = {"Authorization":f"JWT {token}"}
         real_time_url = hydraulic_dict.get("realtime")
         hour_url = hydraulic_dict.get("hourdata")
@@ -120,8 +122,9 @@ if __name__ == '__main__':
     HYDRAULIC_DATA_URL = sys.argv[3] # 请求地址
     HYDRAULIC_DATA = sys.argv[4] # 授权秘钥
     AUTHORIZATION_DATA_URL = sys.argv[5] # 请求地址
-    AUTHORIZATION_DATA = sys.argv[6] # 授权秘钥
-    api_url_list = sys.argv[7:]
+    AUTHORIZATION_USERNAME = sys.argv[6] # 授权秘钥
+    AUTHORIZATION_PWD = sys.argv[7] # 授权秘钥
+    api_url_list = sys.argv[8:]
     errmsg = ""
     for api_url_item in api_url_list:
         if "hydraulic" in api_url_item and "realtime" in api_url_item:
