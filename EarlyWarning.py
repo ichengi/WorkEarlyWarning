@@ -56,7 +56,7 @@ def judge_api(api_url:str)->str:
         if seconds>60*60*1.5:# 判断是在规定时间内获取的
             errmsg = f"接口:{api_url}获取时间超时,最近一次获取是在{time_get},当前时间为{now_time},过期{float(seconds/60/60)}小时"
     # 日数据
-    elif "QueryWeatherpre" in api_url:
+    elif "QueryWeatherpre" in api_url and "weatherapi" in api_url :
         now_time = datetime.datetime.now()
         api_data = get_json(api_url+f"&Day={str(now_time)[:10]}")  #获取数据
         if api_data["data"] != "":
