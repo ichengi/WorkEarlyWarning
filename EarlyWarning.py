@@ -100,7 +100,7 @@ def judge_api(api_url:str)->str:
                     hour_time =  datetime.datetime.strptime(get_time_str, "%Y-%m-%d %H")
                     now_time = datetime.datetime.now()
                     seconds = (now_time - hour_time).seconds
-                    if seconds > 60 * 60 *2:  # 判断是在规定时间内获取的
+                    if seconds > （60 * 60 *2 +300）:  # 判断是在规定时间内获取的
                         errmsg = f"接口:水利小时数据获取时间超时,最近一次获取是在{hour_time},过期{float(seconds / 60/60)}小时"
 
                     #判断天接口
